@@ -1,0 +1,91 @@
+#page-top {
+    font-family: 'Raleway', sans-serif;
+}
+
+.highlight{
+    font-size: 28px;
+}
+
+.section_custom{
+  display: grid;
+  grid-template-areas: '.'
+  'condiv'
+  '.';
+  grid-template-rows: 60px auto 60px;
+  height:95vh;
+  margin: 0 200px 0 200px;
+}
+
+.condiv{
+  display: grid;
+  grid-area: condiv;
+  grid-template-areas: 't p'
+                        'm isolate'
+                        'm label'
+                        'm slider'
+                        'm sliderlabel';
+  grid-template-columns: 50% auto;
+  grid-template-rows: 15% 300px auto 100px 100px;
+  height: 100%;
+  grid-gap: 10px;
+}
+
+.titlediv {
+  grid-area: t;
+    transform: translateY(50px);
+}
+
+.mapdiv {
+
+  grid-area: m;
+  height: 580px;
+  vertical-align: center;
+
+}
+.mapbody {
+  max-height: 100%;
+  width:500px;
+  height:auto;
+  position: relative;
+  top:0;
+  left: 0;
+  transform: translate(-15px,9px);
+
+}
+.mapVector {
+  position: absolute;
+  opacity:0;
+  transform: translate(63px,0px);
+
+
+}
+.proportion {
+    grid-area: p;
+    display:grid;
+    grid-template-columns: 80px auto auto;
+    transform: translateY(50px);
+}
+
+.isolate {
+  grid-area: isolate;
+  overflow: hidden;
+
+}
+
+.label {
+    grid-area: label;
+    display:grid;
+    grid-template-columns: 80px auto auto;
+    transform: translateY(50px);
+}
+
+.slideriso {
+  grid-area: slider;
+    height: 30%;
+    transform: translateY(100%);
+}
+.sliderlabel {
+    grid-area: sliderlabel;
+    display:grid;
+    grid-template-columns: auto auto;
+}

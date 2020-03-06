@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Home Underwater</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Cabin:700' rel='stylesheet' type='text/css'>
+      <link href="https://fonts.googleapis.com/css?family=Raleway:700" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/grayscale.css" rel="stylesheet">
+    <link href="css/layout.css" rel="stylesheet">
+
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="https://d3js.org/d3-queue.v2.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Homes Underwater</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#isolatingsec2013">2013</a> <!--about-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#isolatingsec2030">2030</a> <!--download-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#isolatingsec2070">2070</a> <!--contact-->
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#depth">Inundation Depth</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Intro Header -->
+    <header class="masthead">
+      <div class="intro-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 mx-auto">
+              <h1 class="brand-heading">Homes Underwater</h1>
+              <p class="intro-text">The level of inundation of Boston residential properties
+                <br>under different flood or sea-level-rise scenarios.</p>
+              <a href="#about" class="btn btn-circle js-scroll-trigger">
+                <i class="fa fa-angle-double-down animated"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="content-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2>About the Project</h2>
+            <p>Our project is to visualize the level of inundation of Boston residential properties
+              under different flood or sea level rise scenarios. </p>
+            <p>First, this visualization offers the general public an intuitive image of flooding situations and future threats to their homes. </p>
+            <p>Second, it displays the progression of the impact of sea-level rise, so as to provoke awareness of such impending threats of climate.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Isolating 2013 -->
+    <section id="isolatingsec2013" class="isolating-section text-center section_custom">
+        <div id="isolating2013" class="condiv">
+            <div id="title2013" class = "titlediv">
+                <p class="highlight">2013 Flood Scenario</p>
+            </div>
+            <div id="map2013" class = "mapdiv">
+                <img src="img/mapcity2013.png" class="mapbody"/>
+                <svg id="mapVec2013" class="mapVector"></svg>
+                <script>
+                    // Our D3 code will go here.
+                    var mapcon2013 = document.getElementById("map2013");
+
+                    var svg2013 = d3.select("#mapVec2013")
+                        .style("top",mapcon2013.getBoundingClientRect().y)
+                        .style("left",mapcon2013.getBoundingClientRect().x)
+                        .style("transform",mapcon2013.getBoundingClientRect().x)
+                        .style("width", mapcon2013.getBoundingClientRect().width)
+                        .style("height", mapcon2013.getBoundingClientRect().height);
+
+
+
+                    var projection2013 = d3.geoAlbers()
+                        .scale(190000)
+                        .rotate( [71.057,0] )
+                        .center( [0, 42.313] )
+                        .translate([mapcon2013.getBoundingClientRect().width / 2, mapcon2013.getBoundingClientRect().height / 2]);
+
+                    var path2013 = d3.geoPath().projection(projection2013);
+
+                    var color2013 = d3.scaleThreshold()
+                        .domain([0.0, 0.1, 0.2, 0.3, 0.4])
+                        .range(d3.schemeBlues[5]);
+
+                    // Create Tooltip and set it to be hidden
+                    var tooltip2013 = d3.select("#map2013")
+                        .append("div")
+                        .attr("class", "callout")
+                        .style("position", "absolute")
+                        .style("font-family", "'Open Sans', sans-serif")
+                        .style("font-size", "12px")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+                        .style("background-color", "white")
+                        .style("opacity","0.7")
+                        .style("padding", "5px");
+
+                    // Queue up datasets using d3 Queue
+                    d3.queue()
+                        .defer(d3.json, "boston_neigh.json") // Load Boston neighorboods
+                        .defer(d3.csv, "twit_pct.csv")
+                        .await(ready); // Run 'ready' when JSONs are loaded
+
+                    // Ready Function, runs when data is loaded
+                    function ready(error, neigh, twit) {
+                        if (error) throw error;
+
+                        var rateById2013 = {}; // Create empty object for holding dataset
+                        twit.forEach(function(d) {
+                            rateById2013[d.id] = +d.rate; // Create property for each ID, give it value from twit_pct
+
+                        });
+                        console.log(rateById2013)
+
+                        svg2013.append("g")
+                            .selectAll("path")
+                            .data(topojson.feature(neigh, neigh.objects.boston_neigh).features) // Bind TopoJSON data elements
+                            .enter().append("path")
+                            .attr("d", path2013)
+                            .style("fill", function(d) {
+                                return color2013(rateById2013[d.properties["OBJECTID"]]);
+                            })
+                            .style("position", "absolute")
+                            .style("top", 0)
+                            .style("right", 0)
+                            .style("stroke", "white")
+                            .on("mouseover", function(d){
+                                return tooltip2013.style("visibility", "visible").text(d.properties["Name"]);
+                            })
+                            .on("mousemove", function(d){
+                                var textcallout = d.properties["Name"] + ": " + rateById2013[d.properties["OBJECTID"]] + "%";
+                                console.log(textcallout);
+                                return tooltip2013.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px").style("textContent", textcallout).style("color", "black");
+                            })
+                            .on("mouseout", function(d){
+                                return tooltip2013.style("visibility", "hidden");
+                            });
+                    }
+
+                </script>
+            </div>
+            <div id="proportion2013" class = "proportion">
+                <p> </p>
+                <p class="highlight" style="color: grey">96%</p>
+                <p class="highlight" style="color: steelblue">4%</p>
+            </div>
+            <div id="isolate2013" class = "isolate">
+                <canvas id= "canvas2013" style="height: 100%;width: 700px; transform: translate(-60px,0);"></canvas>
+                <script>
+                    var canvas2013 = document.getElementById("canvas2013"),
+                        context2013 = canvas2013.getContext("2d"),
+                        width2013 = canvas2013.width,
+                        height2013 = canvas2013.height;
+                    var canvas2013Loaded = false;
+
+                    document.addEventListener("scroll", function () {
+                        setTimeout(function () {
+                            if (!canvas2013Loaded && canvas2013.getBoundingClientRect().y+canvas2013.getBoundingClientRect().height<window.innerHeight && canvas2013.getBoundingClientRect().y>0) {
+                                var n2013 = 20;
+
+                                var nodes2013 = d3.range(n2013 * n2013).map(function(i) {
+                                    return {
+                                        index: i,
+                                        color: i < 385 ? "grey" : "steelblue"
+                                    };
+                                });
+
+                                var simulation2013 = d3.forceSimulation(nodes2013)
+                                    .force("y", d3.forceY())
+                                    .force("grey", isolate2013(d3.forceX(-width2013 / 10), function(d) { return d.color === "grey"; }))
+                                    .force("steelblue", isolate2013(d3.forceX(width2013 / 10), function(d) { return d.color === "steelblue"; }))
+                                    .force("charge", d3.forceManyBody().strength(-1.5))
+                                    .on("tick", ticked2013);
+
+                                canvas2013Loaded = true;
+
+                                function ticked2013() {
+                                    context2013.clearRect(0, 0, width2013, height2013);
+                                    context2013.save();
+                                    context2013.translate(width2013 / 2, height2013 / 2);
+                                    nodes2013.forEach(drawNode2013);
+                                    context2013.restore();
+                                }
+
+                                function drawNode2013(d) {
+                                    context2013.beginPath();
+                                    context2013.moveTo(d.x + 5, d.y);
+                                    context2013.arc(d.x, d.y, 2, 0, 2 * Math.PI);
+                                    context2013.fillStyle = d.color;
+                                    context2013.fill();
+                                }
+
+                                function isolate2013(force, filter) {
+                                    var initialize = force.initialize;
+                                    force.initialize = function() { initialize.call(force, nodes2013.filter(filter)); };
+                                    return force;
+                                }
+                            }
+                        },1500)
+
+                    });
+                </script>
+            </div>
+            <div id="label2013" class = "label">
+                <p> </p>
+                <p>Non-flooded Parcels</p>
+                <p>Flooded Parcels</p>
+            </div>
+            <div id="slider2013" class = "slideriso" style="background-color: #5973ff; border: none;">
+                <!--<button style="background-color: #9fcdff; border: none;"></button>-->
+                <script>
+                    // Our D3 code will go here.
+                    var ratData2013 = [ 49, 51 ]; // Rat data!
+                    var colorbar2013 = ["#9fcdff","#5973ff"];
+
+                    // Width and height of SVG
+                    var w2013 = document.getElementById("slider2013").getBoundingClientRect().width;
+                    var h2013 = document.getElementById("slider2013").getBoundingClientRect().height;
+
+                    //Create SVG element
+                    var svgbar2013 = d3.select("#slider2013")
+                        .append("svg")
+                        .attr("width", w2013)
+                        .attr("height", h2013);
+
+                    // Create Tooltip and set it to be hidden
+                    var tooltipslider2013 = d3.select("body")
+                        .append("div")
+                        .style("position", "absolute")
+                        .style("font-family", "'Open Sans', sans-serif")
+                        .style("font-size", "12px")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+
+                    // Select and generate rectangle elements
+                    var relativeX2013 = 0;
+                    var index2013 = 0;
+                    svgbar2013.selectAll( "rect" )
+                        .data( ratData2013 )
+                        .enter()
+                        .append("rect")
+                        .style("position", "relative")
+                        .style("top", 0)
+                        .style("x", function(d){
+                            var rX = relativeX2013;
+                            relativeX2013 += (d/100) * w2013;
+                            return rX;
+                        })
+                        .attr( "height", 30 )
+                        .attr( "fill", function(d){
+                            index2013 += 1;
+                            return colorbar2013[index2013-1];
+                        })
+                        .attr("width", function(d){
+                            relativeX2013 += (d/100) * w2013;
+                            return (d/100) * w2013; // Set height of rectangle to data value
+                        })
+                        .on("mouseover", function(d){
+                            return tooltipslider2013.style("visibility", "visible").text(d + "%");
+                        })
+                        .on("mousemove", function(d){
+                            return tooltipslider2013.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px").text(d + "%");
+                        })
+                        .on("mouseout", function(d){
+                            return tooltipslider2013.style("visibility", "hidden");
+                        });
+                </script>
+            </div>
+            <div id="sliderlabel2013" class = "sliderlabel">
+                <p style="text-align: left">Inundation Depth < 1</p>
+                <p style="text-align: right">Inundation Depth > 1</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Isolating 2030 -->
+    <section id="isolatingsec2030" class="isolating-section text-center section_custom">
+        <div id="isolating2030" class="condiv">
+            <div id="title2030" class = "titlediv">
+                <p class="highlight">2030 Flood Scenario</p>
+            </div>
+            <div id="map2030" class = "mapdiv">
+                <img src="img/mapcity2030.png" class="mapbody"/>
+                <svg id="mapVec2030" class="mapVector"></svg>
+                <script>
+                    // Our D3 code will go here.
+                    var mapcon2030 = document.getElementById("map2030");
+
+                    var svg2030 = d3.select("#mapVec2030")
+                        .style("top",mapcon2030.getBoundingClientRect().y)
+                        .style("left",mapcon2030.getBoundingClientRect().x)
+                        .style("transform",mapcon2030.getBoundingClientRect().x)
+                        .style("width", mapcon2030.getBoundingClientRect().width)
+                        .style("height", mapcon2030.getBoundingClientRect().height);
+
+
+
+                    var projection2030 = d3.geoAlbers()
+                        .scale(190000)
+                        .rotate( [71.057,0] )
+                        .center( [0, 42.313] )
+                        .translate([mapcon2030.getBoundingClientRect().width / 2, mapcon2030.getBoundingClientRect().height / 2]);
+
+                    var path2030 = d3.geoPath().projection(projection2030);
+
+                    var color2030 = d3.scaleThreshold()
+                        .domain([0.0, 0.1, 0.2, 0.3, 0.4])
+                        .range(d3.schemeBlues[5]);
+
+                    // Create Tooltip and set it to be hidden
+                    var tooltip2030 = d3.select("#map2030")
+                        .append("div")
+                        .attr("class", "callout")
+                        .style("position", "absolute")
+                        .style("font-family", "'Open Sans', sans-serif")
+                        .style("font-size", "12px")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+                        .style("background-color", "white")
+                        .style("opacity","0.7")
+                        .style("padding", "5px");
+
+                    // Queue up datasets using d3 Queue
+                    d3.queue()
+                        .defer(d3.json, "boston_neigh.json") // Load Boston neighorboods
+                        .defer(d3.csv, "twit_pct.csv")
+                        .await(ready); // Run 'ready' when JSONs are loaded
+
+                    // Ready Function, runs when data is loaded
+                    function ready(error, neigh, twit) {
+                        if (error) throw error;
+
+                        var rateById2030 = {}; // Create empty object for holding dataset
+                        twit.forEach(function(d) {
+                            rateById2030[d.id] = +d.rate; // Create property for each ID, give it value from twit_pct
+
+                        });
+                        console.log(rateById2030)
+
+                        svg2030.append("g")
+                            .selectAll("path")
+                            .data(topojson.feature(neigh, neigh.objects.boston_neigh).features) // Bind TopoJSON data elements
+                            .enter().append("path")
+                            .attr("d", path2030)
+                            .style("fill", function(d) {
+                                return color2030(rateById2030[d.properties["OBJECTID"]]);
+                            })
+                            .style("position", "absolute")
+                            .style("top", 0)
+                            .style("right", 0)
+                            .style("stroke", "white")
+                            .on("mouseover", function(d){
+                                return tooltip2030.style("visibility", "visible").text(d.properties["Name"]);
+                            })
+                            .on("mousemove", function(d){
+                                var textcallout = d.properties["Name"] + ": " + rateById2030[d.properties["OBJECTID"]] + "%";
+                                console.log(textcallout);
+                                return tooltip2030.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px").style("textContent", textcallout).style("color", "black");
+                            })
+                            .on("mouseout", function(d){
+                                return tooltip2030.style("visibility", "hidden");
+                            });
+                    }
+
+                </script>
+            </div>
+            <div id="proportion2030" class = "proportion">
+                <p> </p>
+                <p class="highlight" style="color: grey">93%</p>
+                <p class="highlight" style="color: steelblue">7%</p>
+            </div>
+            <div id="isolate2030" class = "isolate">
+                <canvas id= "canvas2030" style="height: 100%;width: 700px; transform: translate(-60px,0);"></canvas>
+                <script>
+                    var canvas2030 = document.getElementById("canvas2030"),
+                        context2030 = canvas2030.getContext("2d"),
+                        width2030 = canvas2030.width,
+                        height2030 = canvas2030.height;
+                    var canvas2030Loaded = false;
+
+                    document.addEventListener("scroll", function () {
+                        setTimeout(function () {
+                            if (!canvas2030Loaded && canvas2030.getBoundingClientRect().y+canvas2030.getBoundingClientRect().height<window.innerHeight && canvas2030.getBoundingClientRect().y>0) {
+                                var n2030 = 20;
+
+                                var nodes2030 = d3.range(n2030 * n2030).map(function(i) {
+                                    return {
+                                        index: i,
+                                        color: i < 372 ? "grey" : "steelblue"
+                                    };
+                                });
+
+                                var simulation2030 = d3.forceSimulation(nodes2030)
+                                    .force("y", d3.forceY())
+                                    .force("grey", isolate2030(d3.forceX(-width2030 / 10), function(d) { return d.color === "grey"; }))
+                                    .force("steelblue", isolate2030(d3.forceX(width2030 / 10), function(d) { return d.color === "steelblue"; }))
+                                    .force("charge", d3.forceManyBody().strength(-1.5))
+                                    .on("tick", ticked2030);
+
+                                canvas2030Loaded = true;
+
+                                function ticked2030() {
+                                    context2030.clearRect(0, 0, width2030, height2030);
+                                    context2030.save();
+                                    context2030.translate(width2030 / 2, height2030 / 2);
+                                    nodes2030.forEach(drawNode2030);
+                                    context2030.restore();
+                                }
+
+                                function drawNode2030(d) {
+                                    context2030.beginPath();
+                                    context2030.moveTo(d.x + 5, d.y);
+                                    context2030.arc(d.x, d.y, 2, 0, 2 * Math.PI);
+                                    context2030.fillStyle = d.color;
+                                    context2030.fill();
+                                }
+
+                                function isolate2030(force, filter) {
+                                    var initialize = force.initialize;
+                                    force.initialize = function() { initialize.call(force, nodes2030.filter(filter)); };
+                                    return force;
+                                }
+                            }
+                        },1500)
+
+                    });
+                </script>
+            </div>
+            <div id="label2030" class = "label">
+                <p> </p>
+                <p>Non-flooded Parcels</p>
+                <p>Flooded Parcels</p>
+            </div>
+            <div id="slider2030" class = "slideriso" style="background-color: #5973ff; border: none;">
+                <!--<button style="background-color: #9fcdff; border: none;"></button>-->
+                <script>
+                    // Our D3 code will go here.
+                    var ratData2030 = [ 57, 43 ]; // Rat data!
+                    var colorbar2030 = ["#9fcdff","#5973ff"];
+
+                    // Width and height of SVG
+                    var w2030 = document.getElementById("slider2030").getBoundingClientRect().width;
+                    var h2030 = document.getElementById("slider2030").getBoundingClientRect().height;
+
+                    //Create SVG element
+                    var svgbar2030 = d3.select("#slider2030")
+                        .append("svg")
+                        .attr("width", w2030)
+                        .attr("height", h2030);
+
+                    // Create Tooltip and set it to be hidden
+                    var tooltipslider2030 = d3.select("body")
+                        .append("div")
+                        .style("position", "absolute")
+                        .style("font-family", "'Open Sans', sans-serif")
+                        .style("font-size", "12px")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+
+                    // Select and generate rectangle elements
+                    var relativeX2030 = 0;
+                    var index2030 = 0;
+                    svgbar2030.selectAll( "rect" )
+                        .data( ratData2030 )
+                        .enter()
+                        .append("rect")
+                        .style("position", "relative")
+                        .style("top", 0)
+                        .style("x", function(d){
+                            var rX = relativeX2030;
+                            relativeX2030 += (d/100) * w2030;
+                            return rX;
+                        })
+                        .attr( "height", 30 )
+                        .attr( "fill", function(d){
+                            index2030 += 1;
+                            return colorbar2030[index2030-1];
+                        })
+                        .attr("width", function(d){
+                            relativeX2030 += (d/100) * w2030;
+                            return (d/100) * w2030; // Set height of rectangle to data value
+                        })
+                        .on("mouseover", function(d){
+                            return tooltipslider2030.style("visibility", "visible").text(d + "%");
+                        })
+                        .on("mousemove", function(d){
+                            return tooltipslider2030.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px").text(d + "%");
+                        })
+                        .on("mouseout", function(d){
+                            return tooltipslider2030.style("visibility", "hidden");
+                        });
+                </script>
+            </div>
+            <div id="sliderlabel2030" class = "sliderlabel">
+                <p style="text-align: left">Inundation Depth < 1</p>
+                <p style="text-align: right">Inundation Depth > 1</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Isolating 2070 -->
+    <section id="isolatingsec2070" class="isolating-section text-center section_custom">
+        <div id="isolating2070" class="condiv">
+            <div id="title2070" class = "titlediv">
+                <p class="highlight">2070 Flood Scenario</p>
+            </div>
+            <div id="map2070" class = "mapdiv">
+                <img src="img/mapcity2070.png" class="mapbody"/>
+                <svg id="mapVec2070" class="mapVector"></svg>
+                <script>
+                    // Our D3 code will go here.
+                    var mapcon2070 = document.getElementById("map2070");
+
+                    var svg2070 = d3.select("#mapVec2070")
+                        .style("top",mapcon2070.getBoundingClientRect().y)
+                        .style("left",mapcon2070.getBoundingClientRect().x)
+                        .style("transform",mapcon2070.getBoundingClientRect().x)
+                        .style("width", mapcon2070.getBoundingClientRect().width)
+                        .style("height", mapcon2070.getBoundingClientRect().height);
+
+
+
+                    var projection2070 = d3.geoAlbers()
+                        .scale(190000)
+                        .rotate( [71.057,0] )
+                        .center( [0, 42.313] )
+                        .translate([mapcon2070.getBoundingClientRect().width / 2, mapcon2070.getBoundingClientRect().height / 2]);
+
+                    var path2070 = d3.geoPath().projection(projection2070);
+
+                    var color2070 = d3.scaleThreshold()
+                        .domain([0.0, 0.1, 0.2, 0.3, 0.4])
+                        .range(d3.schemeBlues[5]);
+
+                    // Create Tooltip and set it to be hidden
+                    var tooltip2070 = d3.select("#map2070")
+                        .append("div")
+                        .attr("class", "callout")
+                        .style("position", "absolute")
+                        .style("font-family", "'Open Sans', sans-serif")
+                        .style("font-size", "12px")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+                        .style("background-color", "white")
+                        .style("opacity","0.7")
+                        .style("padding", "5px");
+
+                    // Queue up datasets using d3 Queue
+                    d3.queue()
+                        .defer(d3.json, "boston_neigh.json") // Load Boston neighorboods
+                        .defer(d3.csv, "twit_pct.csv")
+                        .await(ready); // Run 'ready' when JSONs are loaded
+
+                    // Ready Function, runs when data is loaded
+                    function ready(error, neigh, twit) {
+                        if (error) throw error;
+
+                        var rateById2070 = {}; // Create empty object for holding dataset
+                        twit.forEach(function(d) {
+                            rateById2070[d.id] = +d.rate; // Create property for each ID, give it value from twit_pct
+
+                        });
+                        console.log(rateById2070)
+
+                        svg2070.append("g")
+                            .selectAll("path")
+                            .data(topojson.feature(neigh, neigh.objects.boston_neigh).features) // Bind TopoJSON data elements
+                            .enter().append("path")
+                            .attr("d", path2070)
+                            .style("fill", function(d) {
+                                return color2070(rateById2070[d.properties["OBJECTID"]]);
+                            })
+                            .style("position", "absolute")
+                            .style("top", 0)
+                            .style("right", 0)
+                            .style("stroke", "white")
+                            .on("mouseover", function(d){
+                                return tooltip2070.style("visibility", "visible").text(d.properties["Name"]);
+                            })
+                            .on("mousemove", function(d){
+                                var textcallout = d.properties["Name"] + ": " + rateById2070[d.properties["OBJECTID"]] + "%";
+                                console.log(textcallout);
+                                return tooltip2070.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px").style("textContent", textcallout).style("color", "black");
+                            })
+                            .on("mouseout", function(d){
+                                return tooltip2070.style("visibility", "hidden");
+                            });
+                    }
+
+                </script>
+            </div>
+            <div id="proportion2070" class = "proportion">
+                <p> </p>
+                <p class="highlight" style="color: grey">76%</p>
+                <p class="highlight" style="color: steelblue">24%</p>
+            </div>
+            <div id="isolate2070" class = "isolate">
+                <canvas id= "canvas2070" style="height: 100%;width: 700px; transform: translate(-60px,0);"></canvas>
+                <script>
+                    var canvas2070 = document.getElementById("canvas2070"),
+                        context2070 = canvas2070.getContext("2d"),
+                        width2070 = canvas2070.width,
+                        height2070 = canvas2070.height;
+                    var canvas2070Loaded = false;
+
+                    document.addEventListener("scroll", function () {
+                        setTimeout(function () {
+                            if (!canvas2070Loaded && canvas2070.getBoundingClientRect().y+canvas2070.getBoundingClientRect().height<window.innerHeight && canvas2070.getBoundingClientRect().y>0) {
+                                var n2070 = 20;
+
+                                var nodes2070 = d3.range(n2070 * n2070).map(function(i) {
+                                    return {
+                                        index: i,
+                                        color: i < 306 ? "grey" : "steelblue"
+                                    };
+                                });
+
+                                var simulation2070 = d3.forceSimulation(nodes2070)
+                                    .force("y", d3.forceY())
+                                    .force("grey", isolate2070(d3.forceX(-width2070 / 10), function(d) { return d.color === "grey"; }))
+                                    .force("steelblue", isolate2070(d3.forceX(width2070 / 10), function(d) { return d.color === "steelblue"; }))
+                                    .force("charge", d3.forceManyBody().strength(-1.5))
+                                    .on("tick", ticked2070);
+
+                                canvas2070Loaded = true;
+
+                                function ticked2070() {
+                                    context2070.clearRect(0, 0, width2070, height2070);
+                                    context2070.save();
+                                    context2070.translate(width2070 / 2, height2070 / 2);
+                                    nodes2070.forEach(drawNode2070);
+                                    context2070.restore();
+                                }
+
+                                function drawNode2070(d) {
+                                    context2070.beginPath();
+                                    context2070.moveTo(d.x + 5, d.y);
+                                    context2070.arc(d.x, d.y, 2, 0, 2 * Math.PI);
+                                    context2070.fillStyle = d.color;
+                                    context2070.fill();
+                                }
+
+                                function isolate2070(force, filter) {
+                                    var initialize = force.initialize;
+                                    force.initialize = function() { initialize.call(force, nodes2070.filter(filter)); };
+                                    return force;
+                                }
+                            }
+                        },1500)
+
+                    });
+                </script>
+            </div>
+            <div id="label2070" class = "label">
+                <p> </p>
+                <p>Non-flooded Parcels</p>
+                <p>Flooded Parcels</p>
+            </div>
+            <div id="slider2070" class = "slideriso" style="background-color: #5973ff; border: none;">
+                <!--<button style="background-color: #9fcdff; border: none;"></button>-->
+                <script>
+                    // Our D3 code will go here.
+                    var ratData2070 = [ 48, 52 ]; // Rat data!
+                    var colorbar2070 = ["#9fcdff","#5973ff"];
+
+                    // Width and height of SVG
+                    var w2070 = document.getElementById("slider2070").getBoundingClientRect().width;
+                    var h2070 = document.getElementById("slider2070").getBoundingClientRect().height;
+
+                    //Create SVG element
+                    var svgbar2070 = d3.select("#slider2070")
+                        .append("svg")
+                        .attr("width", w2070)
+                        .attr("height", h2070);
+
+                    // Create Tooltip and set it to be hidden
+                    var tooltipslider2070 = d3.select("body")
+                        .append("div")
+                        .style("position", "absolute")
+                        .style("font-family", "'Open Sans', sans-serif")
+                        .style("font-size", "12px")
+                        .style("z-index", "10")
+                        .style("visibility", "hidden")
+
+                    // Select and generate rectangle elements
+                    var relativeX2070 = 0;
+                    var index2070 = 0;
+                    svgbar2070.selectAll( "rect" )
+                        .data( ratData2070 )
+                        .enter()
+                        .append("rect")
+                        .style("position", "relative")
+                        .style("top", 0)
+                        .style("x", function(d){
+                            var rX = relativeX2070;
+                            relativeX2070 += (d/100) * w2070;
+                            return rX;
+                        })
+                        .attr( "height", 30 )
+                        .attr( "fill", function(d){
+                            index2070 += 1;
+                            return colorbar2070[index2070-1];
+                        })
+                        .attr("width", function(d){
+                            relativeX2070 += (d/100) * w2070;
+                            return (d/100) * w2070; // Set height of rectangle to data value
+                        })
+                        .on("mouseover", function(d){
+                            return tooltipslider2070.style("visibility", "visible").text(d + "%");
+                        })
+                        .on("mousemove", function(d){
+                            return tooltipslider2070.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px").text(d + "%");
+                        })
+                        .on("mouseout", function(d){
+                            return tooltipslider2070.style("visibility", "hidden");
+                        });
+                </script>
+            </div>
+            <div id="sliderlabel2070" class = "sliderlabel">
+                <p style="text-align: left">Inundation Depth < 1</p>
+                <p style="text-align: right">Inundation Depth > 1</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- depth Section -->
+    <section id="depth" class="depth-section content-section text-center">
+      <div class="container">
+        <div class="col-lg-8 mx-auto">
+          <h2>Inundation Distribution</h2>
+          <p>The following section displays inundation situations of different neighborhoods.
+            Each dot represents one parcel inundation depth data.
+            For the clarity of visualization, we take out those parcels with 0 or 1 ft inundation or depths.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- depthd3 Section -->
+    <section id="depthd3" class="depthd3-section text-center">
+      <!-- <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2>About Grayscale</h2>
+            <p>Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
+              <a href="http://startbootstrap.com/template-overviews/grayscale/">the preview page</a>. The theme is open source, and you can use it for any purpose, personal or commercial.</p>
+            <p>This theme features stock photos by
+              <a href="http://gratisography.com/">Gratisography</a>
+              along with a custom Google Maps skin courtesy of
+              <a href="http://snazzymaps.com/">Snazzy Maps</a>.</p>
+            <p>Grayscale includes full HTML, CSS, and custom JavaScript files along with SASS and LESS files for easy customization!</p>
+          </div>
+        </div>
+      </div> -->
+      <iframe src="inundationdistribution/index_final_0521_modified_v3.html" height="2000" width="1000" style="border:none;"></iframe>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container text-center">
+        <p>Copyright &copy; Your Website 2018</p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&sensor=false"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/grayscale.min.js"></script>
+
+    <script></script>
+
+  </body>
+
+</html>
